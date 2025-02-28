@@ -1,0 +1,75 @@
+import network
+import time
+import urequests  # Para realizar solicitudes HTTP
+from machine import Pin, ADC
+
+# Configuración de la conexión Wi-Fi
+ssid = 'Alumno'  # Nombre de la red Wi-Fi
+password = 'Mebe2ege'  # Contraseña de la red Wi-Fi
+
+# Datos de ThingSpeak
+THINGSPEAK_URL = 'https://api.thingspeak.com/update'
+THINGSPEAK_API_KEY = '1WVJYKML9MMBC4SC'  # Tu Write API Key de ThingSpeak
+CHANNEL_ID = '2852199'  # Tu Channel ID
+
+# Configurar ADC para leer la señal analógica del LM35    
+sensor = ADC(Pin(26))  # Usar pin 26 (ajustar según tu configuración)
+
+# Función para conectarse a Wi-Fi
+def conectar_wifi():
+    print("Conectando a Wi-Fi...")
+    wlan = network.WLAN(network.STA_IF)
+    wlan.active(True)
+    wlan.connect(ssid, password)
+    
+    # Esperar hasta que se establezca la conexión
+    timeout = 30  # Tiempo máximo de espera en segundos
+    while not wlan.isconnected() and timeout > 0:
+        print("Esperando conexión...")
+        time.sleep(1)
+        timeout -= 1
+    
+    if wlan.isconnected():
+        print("Conexión Wi-Fi exitosa")
+        print('Dirección IP:', wlan.ifconfig()[0])
+    else:
+        print("No se pudo conectar al Wi-Fi dentro del tiempo especificado.")
+        print("Revisa SSID, contraseña o la red Wi-Fi.")
+
+# Función para leer la temperatura del LM35
+def leer_temperatura():
+    # Convertir la lectura analógica (0-65535) a un valor en grados Celsius
+    lectura_analogica = sensor.read_u16()  # Valor entre 0-65535
+    # LM35 genera 10mV por cada grado Celsius, el rango del ADC es 0-65535
+    temperatura = (lectura_analogica / 65535.0) * 3.3 * 100.0  # Convertir a °C
+    return temperatura
+    
+
+# Función para enviar los datos a ThingSpeak
+def enviar_datos(temperatura):
+    try:
+       
+        url=f"{THINGSPEAK_URL}?api_key={THINGSPEAK_API_KEY}&field1={temperatura}"
+        response = urequests.get(url)
+        print("Datos enviados: Temperatura = {:.2f}°C".format(temperatura))
+        response.close()
+    except Exception as e:
+        print("Error al enviar los datos a ThingSpeak:", e)
+
+# Main loop
+def main():
+    conectar_wifi()
+    
+    while True:
+        # Leer la temperatura
+        temperatura = leer_temperatura()
+        
+        # Enviar los datos a ThingSpeak
+        enviar_datos(temperatura)
+        
+        # Esperar 180 segundos (3 minutos) antes de enviar el siguiente dato
+        time.sleep(180)
+
+# Ejecutar el script
+if __name__ == "__main__":
+    main()
