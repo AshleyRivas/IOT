@@ -5,15 +5,21 @@ Además, se implementará MathWorks en la plataforma para realizar análisis de 
 Herramientas necesarias:
 
 -Raspberry Pi Pico W
-
 -Sensor de temperatura LM35
-
 -ThingSpeak (almacenamiento y visualización de datos)
-
 -MathWorks (análisis y procesamiento de datos en ThingSpeak)
+-Protoboard y cables.
+-Conexión wi-fi.
+-Computadora.
+-Programa Thonny.
 
+Instalar:
+-Programa Thonny https://thonny.org/ 
+-Conectar raspberry pi pico W a la computadora
+-Ir a la opción de interpreter y seleccionar la raspberry.
+-instalar programa y copiar el codigo que te proporcione.
 
-Desarrollo de la práctica:
+Conexión :
 
 Parte 1: Configuración del Hardware 
 
