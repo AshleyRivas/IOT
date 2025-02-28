@@ -1,75 +1,82 @@
-import network
-import time
+# Importar las bibliotecas necesarias
+import network  # Para la conexión a redes Wi-Fi
+import time  # Para manejar los tiempos de espera
 import urequests  # Para realizar solicitudes HTTP
-from machine import Pin, ADC
+from machine import Pin, ADC  # Para manejar los pines y la lectura de ADC en el microcontrolador
 
 # Configuración de la conexión Wi-Fi
-ssid = 'Alumno'  # Nombre de la red Wi-Fi
-password = 'Mebe2ege'  # Contraseña de la red Wi-Fi
+ssid = 'Galaxy S23 Ultra'  # Nombre de la red Wi-Fi a la que se va a conectar
+password = '1234713a'  # Contraseña de la red Wi-Fi
 
-# Datos de ThingSpeak
-THINGSPEAK_URL = 'https://api.thingspeak.com/update'
-THINGSPEAK_API_KEY = '1WVJYKML9MMBC4SC'  # Tu Write API Key de ThingSpeak
-CHANNEL_ID = '2852199'  # Tu Channel ID
+# Datos de ThingSpeak para enviar los datos
+THINGSPEAK_URL = 'https://api.thingspeak.com/update'  # URL para actualizar el canal en ThingSpeak
+THINGSPEAK_API_KEY = '1WVJYKML9MMBC4SC'  # Write API Key de tu canal en ThingSpeak
+CHANNEL_ID = '2852199'  # ID de tu canal en ThingSpeak (puedes usarlo para verificar si los datos se envían correctamente)
 
-# Configurar ADC para leer la señal analógica del LM35    
-sensor = ADC(Pin(26))  # Usar pin 26 (ajustar según tu configuración)
+# Configurar el ADC para leer la señal analógica del sensor LM35
+sensor = ADC(Pin(26))  # Usar el pin 26 del microcontrolador para conectar el sensor LM35 (ajustar según tu hardware)
 
 # Función para conectarse a Wi-Fi
 def conectar_wifi():
-    print("Conectando a Wi-Fi...")
-    wlan = network.WLAN(network.STA_IF)
-    wlan.active(True)
-    wlan.connect(ssid, password)
+    print("Conectando a Wi-Fi...")  # Mensaje inicial de conexión
+    wlan = network.WLAN(network.STA_IF)  # Crear un objeto para manejar la conexión Wi-Fi en modo estación
+    wlan.active(True)  # Activar la interfaz de Wi-Fi
+    wlan.connect(ssid, password)  # Conectarse a la red usando el SSID y la contraseña configurados
     
-    # Esperar hasta que se establezca la conexión
+    # Intentar conectar durante 30 segundos antes de abortar
     timeout = 30  # Tiempo máximo de espera en segundos
-    while not wlan.isconnected() and timeout > 0:
-        print("Esperando conexión...")
-        time.sleep(1)
-        timeout -= 1
+    while not wlan.isconnected() and timeout > 0:  # Espera a que se establezca la conexión
+        print("Esperando conexión...")  # Mensaje mientras se intenta conectar
+        time.sleep(1)  # Esperar un segundo antes de intentar de nuevo
+        timeout -= 1  # Reducir el tiempo de espera
     
-    if wlan.isconnected():
-        print("Conexión Wi-Fi exitosa")
-        print('Dirección IP:', wlan.ifconfig()[0])
+    # Comprobar si la conexión fue exitosa
+    if wlan.isconnected():  # Si la conexión se establece correctamente
+        print("Conexión Wi-Fi exitosa")  # Mensaje de éxito
+        print('Dirección IP:', wlan.ifconfig()[0])  # Mostrar la dirección IP asignada
     else:
+        # Si no se pudo conectar, mostrar mensaje de error
         print("No se pudo conectar al Wi-Fi dentro del tiempo especificado.")
         print("Revisa SSID, contraseña o la red Wi-Fi.")
 
-# Función para leer la temperatura del LM35
+# Función para leer la temperatura del sensor LM35
 def leer_temperatura():
-    # Convertir la lectura analógica (0-65535) a un valor en grados Celsius
-    lectura_analogica = sensor.read_u16()  # Valor entre 0-65535
-    # LM35 genera 10mV por cada grado Celsius, el rango del ADC es 0-65535
-    temperatura = (lectura_analogica / 65535.0) * 3.3 * 100.0  # Convertir a °C
-    return temperatura
-    
+    # Leer la señal analógica del sensor (valor entre 0 y 65535)
+    lectura_analogica = sensor.read_u16()  # Obtener el valor de la señal analógica
+    # LM35 genera 10mV por cada grado Celsius, y el ADC tiene un rango de 0 a 65535
+    # Realizar la conversión para obtener la temperatura en grados Celsius
+    temperatura = (lectura_analogica / 65535.0) * 3.3 * 100.0  # Formula de conversión
+    return temperatura  # Retornar la temperatura en grados Celsius
 
-# Función para enviar los datos a ThingSpeak
+# Función para enviar los datos de temperatura a ThingSpeak
 def enviar_datos(temperatura):
     try:
-       
+        # Crear la URL para enviar los datos a ThingSpeak
         url=f"{THINGSPEAK_URL}?api_key={THINGSPEAK_API_KEY}&field1={temperatura}"
+        # Realizar la solicitud GET a ThingSpeak para enviar la temperatura
         response = urequests.get(url)
+        # Imprimir en consola el dato enviado
         print("Datos enviados: Temperatura = {:.2f}°C".format(temperatura))
-        response.close()
+        response.close()  # Cerrar la respuesta HTTP para liberar recursos
     except Exception as e:
+        # Si hay un error al enviar los datos, imprimir el error
         print("Error al enviar los datos a ThingSpeak:", e)
 
-# Main loop
+# Bucle principal del programa
 def main():
-    conectar_wifi()
+    conectar_wifi()  # Llamar a la función para conectarse a Wi-Fi
     
-    while True:
-        # Leer la temperatura
+    while True:  # Bucle infinito para seguir enviando datos
+        # Leer la temperatura del sensor LM35
         temperatura = leer_temperatura()
         
-        # Enviar los datos a ThingSpeak
+        # Enviar la temperatura a ThingSpeak
         enviar_datos(temperatura)
         
-        # Esperar 180 segundos (3 minutos) antes de enviar el siguiente dato
+        # Esperar 180 segundos (3 minutos) antes de realizar la siguiente lectura y envío de datos
         time.sleep(180)
 
-# Ejecutar el script
-if __name__ == "__main__":
-    main()
+# Ejecutar el script si este es el módulo principal
+if __name__ == "__main__":  # Verificar si el script se ejecuta directamente
+    main()  # Ejecutar la función principal para comenzar a leer y enviar datos
+
