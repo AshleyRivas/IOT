@@ -5,19 +5,31 @@ Además, se implementará MathWorks en la plataforma para realizar análisis de 
 Herramientas necesarias:
 
 -Raspberry Pi Pico W
+
 -Sensor de temperatura LM35
+
 -ThingSpeak (almacenamiento y visualización de datos)
+
 -MathWorks (análisis y procesamiento de datos en ThingSpeak)
+
 -Protoboard y cables.
+
 -Conexión wi-fi.
+
 -Computadora.
+
 -Programa Thonny.
+
 
 Instalar:
 -Programa Thonny https://thonny.org/ 
+
 -Conectar raspberry pi pico W a la computadora
+
 -Ir a la opción de interpreter y seleccionar la raspberry.
+
 -instalar programa y copiar el codigo que te proporcione.
+
 
 Conexión :
 
@@ -36,11 +48,11 @@ Parte 1: Configuración del Hardware
 
 Parte 2: Programación en MicroPython 
 
--Utilizar el codigo porporcionado en MicroPython para:
+-Utilizar el codigo porporcionado en MicroPython.
 
 -Conectarse a Wi-Fi (utiliza el usuario y contraseña de tu red).
 
--Leer la temperatura en °C usando el LM35.
+-Vas a leer la temperatura en °C usando el LM35.
 
 -Convertir la señal analógica a temperatura.
 
@@ -55,7 +67,9 @@ Parte 3: Visualización en ThingSpeak
 
 -Configurar MathWorks en ThingSpeak para:
 
--Calcular el promedio de temperatura en los últimos 10 datos.
+  -Calcular el promedio de temperatura en los últimos 10 datos.
 
--Mostrar un mensaje de alerta si la temperatura es mayor a 35°C.
+  -Mostrar un mensaje de alerta si la temperatura es mayor a 35°C.
+
+Todos los codigos necesarios estaran en el repositorio
 
