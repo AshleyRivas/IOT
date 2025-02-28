@@ -18,23 +18,38 @@ Desarrollo de la práctica:
 Parte 1: Configuración del Hardware 
 
 -Conectar el sensor LM35 a la Raspberry Pi Pico W:
+
      VCC: 5V (conectar a VBUS (pin 40) - revisar Pinout)
+     
      GND: GND
+     
      Salida (Vout): GP26 (ADC0)
+     
 -Leer la temperatura usando el convertidor ADC de la Pico W.
+
 
 Parte 2: Programación en MicroPython 
 
 -Escribir un script en MicroPython para:
+
 -Conectarse a Wi-Fi.
+
 -Leer la temperatura en °C usando el LM35.
+
 -Convertir la señal analógica a temperatura.
+
 -Enviar los datos a ThingSpeak en field1.
+
 -Enviar datos cada 180 segundos.
+
 
 Parte 3: Visualización en ThingSpeak 
 
 -Configurar gráficas (Charts) en ThingSpeak para visualizar los datos en tiempo real.
+
 -Configurar MathWorks en ThingSpeak para:
+
 -Calcular el promedio de temperatura en los últimos 10 datos.
+
 -Mostrar un mensaje de alerta si la temperatura es mayor a 35°C.
+
