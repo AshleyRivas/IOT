@@ -30,9 +30,9 @@ Parte 1: Configuración del Hardware
 
 Parte 2: Programación en MicroPython 
 
--Escribir un script en MicroPython para:
+-Utilizar el codigo porporcionado en MicroPython para:
 
--Conectarse a Wi-Fi.
+-Conectarse a Wi-Fi (utiliza el usuario y contraseña de tu red).
 
 -Leer la temperatura en °C usando el LM35.
 
