@@ -3,10 +3,15 @@ Código en MicroPython para un sistema de monitoreo de temperatura basado en Int
 Además, se implementará MathWorks en la plataforma para realizar análisis de datos en tiempo real, como el cálculo del promedio de temperatura y la generación de alertas cuando los valores superen un umbral predefinido.
 
 Herramientas necesarias:
+
 -Raspberry Pi Pico W
+
 -Sensor de temperatura LM35
+
 -ThingSpeak (almacenamiento y visualización de datos)
+
 -MathWorks (análisis y procesamiento de datos en ThingSpeak)
+
 
 Desarrollo de la práctica:
 
